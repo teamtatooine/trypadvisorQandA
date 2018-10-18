@@ -47,16 +47,21 @@ app.get('/api/attraction/:id', (req, res) => {
 });
 
 app.get('/api/questions', (req, res) => {
-  let resultsArr = [];
-  let results = {};
-
   db.getQuestions(function(data) {
     res.json(data);
   });
 });
 
 app.get('/api/answer/:questionId', (req, res) => {
-  res.send({ express: 'Hello From Express' });
+  let result = {};
+
+  db.getAnswer(req.params.questionId, function(data) {
+    result.id = data[0].ID;
+    result.questionID = data[0].questionID;
+    result.userID = data[0].userID;
+    result.answer = data[0].answer;
+    result.answerDate = data[0].answerDate;
+  });
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

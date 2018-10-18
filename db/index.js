@@ -138,6 +138,18 @@ let getQuestions = function (cb) {
   })
 }
 
+let getAnswer = function (questionId, cb) {
+  var sql = "select * from answer where questionId = ?";
+
+  connection.query(sql, [questionId], function(err, results, fields) {
+    if (err) {
+      throw err;
+    } else {
+      cb(results);
+    }
+  })
+}
+
 
 // connection.end();
 
@@ -149,3 +161,4 @@ module.exports.userAccount = userAccount;
 module.exports.getUser = getUser;
 module.exports.getAttraction = getAttraction;
 module.exports.getQuestions = getQuestions;
+module.exports.getAnswer = getAnswer;
