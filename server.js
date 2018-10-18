@@ -21,7 +21,29 @@ app.get('/api/user/:id', (req, res) => {
 });
 
 app.get('/api/attraction/:id', (req, res) => {
+  let result = {};
 
+  db.getAttraction(req.params.id, function(data) {
+    result.id = data[0].ID;
+    result.name = data[0].name;
+    result.description = data[0].description;
+    result.phone = data[0].phone;
+    result.email = data[0].email;
+    result.website = data[0].website;
+    result.suggestedDuration = data[0].suggestedDuration;
+    result.featuredIn = data[0].featuredIn;
+    result.address1 = data[0].address1;
+    result.address2 = data[0].address2;
+    result.city = data[0].city;
+    result.state = data[0].state;
+    result.country = data[0].country;
+    result.latitude = data[0].latitude;
+    result.longitude = data[0].longitude;
+    result.category = data[0].category;
+    result.bio = data[0].sentences;
+    result.image = data[0].image;
+    res.json(result);
+  })
 });
 
 app.get('/api/question', (req, res) => {

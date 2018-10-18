@@ -126,6 +126,11 @@ let getAttraction = function (attractionID, cb) {
   })
 }
 
+let getQuestions = function (cb) {
+  var sql = "SELECT * FROM question";
+
+
+}
 
 
 // connection.end();
