@@ -43,13 +43,16 @@ app.get('/api/attraction/:id', (req, res) => {
     result.bio = data[0].sentences;
     result.image = data[0].image;
     res.json(result);
-  })
+  });
 });
 
-app.get('/api/question', (req, res) => {
-  let result = {};
+app.get('/api/questions', (req, res) => {
+  let resultsArr = [];
+  let results = {};
 
-
+  db.getQuestions(function(data) {
+    res.json(data);
+  });
 });
 
 app.get('/api/answer/:questionId', (req, res) => {

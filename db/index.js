@@ -129,7 +129,13 @@ let getAttraction = function (attractionID, cb) {
 let getQuestions = function (cb) {
   var sql = "SELECT * FROM question";
 
-
+  connection.query(sql, function(err, results, fields) {
+    if (err) {
+      throw err;
+    } else {
+      cb(results);
+    }
+  })
 }
 
 
@@ -142,3 +148,4 @@ module.exports.answer = answer;
 module.exports.userAccount = userAccount;
 module.exports.getUser = getUser;
 module.exports.getAttraction = getAttraction;
+module.exports.getQuestions = getQuestions;
