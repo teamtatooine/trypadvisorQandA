@@ -46,8 +46,8 @@ app.get('/api/attraction/:id', (req, res) => {
   });
 });
 
-app.get('/api/questions', (req, res) => {
-  db.getQuestions(function(data) {
+app.get('/api/questions/:id', (req, res) => {
+  db.getQuestions(req.params.id, function(data) {
     res.json(data);
   });
 });
@@ -68,5 +68,5 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 
 // db.attraction();
 // db.userAccount();
-// db.answer();
 // db.question();
+// db.answer();

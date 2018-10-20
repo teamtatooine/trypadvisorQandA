@@ -60,6 +60,7 @@ CREATE TABLE userAccount
     (
       ID int NOT NULL
       AUTO_INCREMENT,
+      attractionId int,
     question varchar
       (500) NOT NULL,
     questionDate datetime,
@@ -84,6 +85,8 @@ answer varchar
         ALTER TABLE answer ADD FOREIGN KEY (questionID) REFERENCES question(ID);
 
         ALTER TABLE question ADD FOREIGN KEY (userID) REFERENCES userAccount(ID);
+
+        ALTER TABLE question ADD FOREIGN KEY (attractionID) REFERENCES attraction(ID);
 
         ALTER TABLE answer ADD FOREIGN KEY (userID) REFERENCES userAccount(ID);
 

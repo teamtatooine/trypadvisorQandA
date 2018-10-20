@@ -68,13 +68,14 @@ let userAccount = function () {
 let question = function () {
   for ( let i = 1; i < 101; i++) {
     const userID = i;
+    const attractionID = i;
     const question = faker.lorem.sentence();
     const questionDate = faker.date.past();
 
     console.log('question', question);
 
-    var sql = "INSERT INTO question (question, questionDate, userID) VALUES (?, ?, ?)";
-    connection.query(sql, [question, questionDate, userID], function (err, result, fields) {
+    var sql = "INSERT INTO question (question, questionDate, userID, attractionID) VALUES (?, ?, ?, ?)";
+    connection.query(sql, [question, questionDate, userID, attractionID], function (err, result, fields) {
       if (err) {
         throw err;
       } else {
@@ -126,10 +127,10 @@ let getAttraction = function (attractionID, cb) {
   })
 }
 
-let getQuestions = function (cb) {
-  var sql = "SELECT * FROM question";
+let getQuestions = function (attractionId, cb) {
+  var sql = "SELECT * FROM question where attractionId = ?";
 
-  connection.query(sql, function(err, results, fields) {
+  connection.query(sql, [attractionId], function(err, results, fields) {
     if (err) {
       throw err;
     } else {
