@@ -127,7 +127,7 @@ let getAttraction = function (attractionID, cb) {
   })
 }
 
-let getQuestions = function (attractionId, cb) {
+let getQuestion = function (attractionId, cb) {
   var sql = "SELECT * FROM question where attractionId = ?";
 
   connection.query(sql, [attractionId], function(err, results, fields) {
@@ -151,6 +151,22 @@ let getAnswer = function (questionId, cb) {
   })
 }
 
+let getQuestions = function (attractionId, cb) {
+  var sql = `SELECT q.ID, q.question, q.questionDate, a.answer, a.answerDate, att.name, u.username as questionUser, u.profilePicture as questionUserProfilePicture, u.memberSince as questionUserMemberSince, ua.username as answerUser, ua.profilePicture as answerUserProfilePicture, ua.memberSince as answerUserMemberSince FROM question q
+    INNER JOIN answer a ON q.ID = a.questionID
+    INNER JOIN attraction att ON att.ID = q.attractionID
+    INNER JOIN userAccount u ON u.ID = q.userID -- question user
+    INNER JOIN userAccount ua ON ua.ID = a.userID -- answer user`;
+
+  connection.query(sql, function(err, results, fields) {
+    if (err) {
+      throw err;
+    } else {
+      cb(results);
+    }
+  })
+}
+
 
 // connection.end();
 
@@ -161,5 +177,6 @@ module.exports.answer = answer;
 module.exports.userAccount = userAccount;
 module.exports.getUser = getUser;
 module.exports.getAttraction = getAttraction;
-module.exports.getQuestions = getQuestions;
+module.exports.getQuestion = getQuestion;
 module.exports.getAnswer = getAnswer;
+module.exports.getQuestions = getQuestions;

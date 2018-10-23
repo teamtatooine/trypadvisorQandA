@@ -1,8 +1,12 @@
 const express = require('express');
 const db = require('./db/index');
-
-const app = express();
+const bodyParser = require('body-parser');
+let app = express();
 const port = process.env.PORT || 5000;
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(__dirname + '/TrypAdvisorClient/dist'));
 
 app.get('/api/hello', (req, res) => {
   res.send({ express: 'Hello From Express' });
@@ -46,8 +50,8 @@ app.get('/api/attraction/:id', (req, res) => {
   });
 });
 
-app.get('/api/questions/:id', (req, res) => {
-  db.getQuestions(req.params.id, function(data) {
+app.get('/api/question/:id', (req, res) => {
+  db.getQuestion(req.params.id, function(data) {
     res.json(data);
   });
 });
@@ -62,6 +66,29 @@ app.get('/api/answer/:questionId', (req, res) => {
     result.answer = data[0].answer;
     result.answerDate = data[0].answerDate;
   });
+});
+
+app.get('/api/questions/:attractionId', (req, res) => {
+  let result = {};
+  db.getQuestions(req.params.attractionId, function(data) {
+    // console.log('getQuestions', data[0])
+    result.id = data[0].ID;
+    result.question = data[0].question;
+    result.questionDate = data[0].questionDate;
+    result.user = {};
+    result.user.username = data[0].questionUser;
+    result.user.userPhotoUrl = data[0].questionUserProfilePicture;
+    result.user.userMemberSince = data[0].questionUserMemberSince;
+    result.answer = {};
+    result.answer.answer = data[0].answer;
+    result.answer.answerDate = data[0].answerDate;
+    result.answer.user = {};
+    result.answer.user.username = data[0].answerUser;
+    result.answer.user.userPhotoUrl = data[0].answerUserProfilePicture;
+    result.answer.user.userMemberSince = data[0].answerUserMemberSince;
+    result.attractionName = data[0].name;
+    res.json(result);
+  })
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
