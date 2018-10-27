@@ -10,6 +10,7 @@
     "cors": "^2.8.4",
     "express": "^4.16.2",
     "faker": "^4.1.0",
+    "moment": "^2.22.2",
     "mysql": "^2.16.0"
   },
   "devDependencies": {

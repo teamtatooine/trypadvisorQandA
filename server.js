@@ -73,31 +73,67 @@ app.get('/api/answer/:questionId', (req, res) => {
 });
 
 app.get('/api/questions/:attractionId', (req, res) => {
-  let result = {};
   db.getQuestions(req.params.attractionId, function(data) {
-    // console.log('getQuestions', data[0])
-    result.id = data[0].ID;
-    result.question = data[0].question;
-    result.questionDate = data[0].questionDate;
-    result.user = {};
-    result.user.username = data[0].questionUser;
-    result.user.userPhotoUrl = data[0].questionUserProfilePicture;
-    result.user.userMemberSince = data[0].questionUserMemberSince;
-    result.answer = {};
-    result.answer.answer = data[0].answer;
-    result.answer.answerDate = data[0].answerDate;
-    result.answer.user = {};
-    result.answer.user.username = data[0].answerUser;
-    result.answer.user.userPhotoUrl = data[0].answerUserProfilePicture;
-    result.answer.user.userMemberSince = data[0].answerUserMemberSince;
-    result.attractionName = data[0].name;
-    res.json([result]);
+    // console.log('getQuestions', data);
+    let resArray = [];
+    Object.keys(data).forEach(function(key) {
+      let result = {};
+      var row = data[key];
+      result.id = row.ID;
+      result.question = row.question;
+      result.questionDate = row.questionDate;
+      result.user = {};
+      result.user.username = row.questionUser;
+      result.user.userPhotoUrl = row.questionUserProfilePicture;
+      result.user.userMemberSince = row.questionUserMemberSince;
+      result.answer = {};
+      result.answer.answer = row.answer;
+      result.answer.answerDate = row.answerDate;
+      result.answer.user = {};
+      result.answer.user.username = row.answerUser;
+      result.answer.user.userPhotoUrl = row.answerUserProfilePicture;
+      result.answer.user.userMemberSince = row.answerUserMemberSince;
+      result.attractionName = row.name;
+      resArray.push(result);
+    });
+    console.log('😇', resArray);
+    res.json(resArray);
   })
 });
 
-app.post('/api/question/:questionId/:userId', (req, res) => {
-  console.log('params', req.params);
-  console.log('body', req.body);
+app.post('/api/question/:attractionId/:userId', (req, res) => {
+  const attractionId = req.params.attractionId,
+        userId = req.params.userId,
+        question = req.body.question;
+        // console.log('post attractionId', req.params);
+  db.postQuestion(userId, attractionId, question, function(data) {
+    let result = {};
+    db.getQuestions(req.params.attractionId, function(data) {
+      let resArray = [];
+      Object.keys(data).forEach(function(key) {
+        let result = {};
+        var row = data[key];
+        result.id = row.ID;
+        result.question = row.question;
+        result.questionDate = row.questionDate;
+        result.user = {};
+        result.user.username = row.questionUser;
+        result.user.userPhotoUrl = row.questionUserProfilePicture;
+        result.user.userMemberSince = row.questionUserMemberSince;
+        result.answer = {};
+        result.answer.answer = row.answer;
+        result.answer.answerDate = row.answerDate;
+        result.answer.user = {};
+        result.answer.user.username = row.answerUser;
+        result.answer.user.userPhotoUrl = row.answerUserProfilePicture;
+        result.answer.user.userMemberSince = row.answerUserMemberSince;
+        result.attractionName = row.name;
+        resArray.push(result);
+      });
+      console.log('😇', resArray);
+      res.json(resArray);
+    });
+  });
 })
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

@@ -1,5 +1,6 @@
 const data = require('../data');
 const faker = require('faker');
+const moment = require('moment');
 var mysql      = require('mysql');
 var connection = mysql.createConnection({
   host     : 'localhost',
@@ -153,18 +154,33 @@ let getAnswer = function (questionId, cb) {
 
 let getQuestions = function (attractionId, cb) {
   var sql = `SELECT q.ID, q.question, q.questionDate, a.answer, a.answerDate, att.name, u.username as questionUser, u.profilePicture as questionUserProfilePicture, u.memberSince as questionUserMemberSince, ua.username as answerUser, ua.profilePicture as answerUserProfilePicture, ua.memberSince as answerUserMemberSince FROM question q
-    INNER JOIN answer a ON q.ID = a.questionID
-    INNER JOIN attraction att ON att.ID = q.attractionID
-    INNER JOIN userAccount u ON u.ID = q.userID -- question user
-    INNER JOIN userAccount ua ON ua.ID = a.userID -- answer user`;
+    LEFT JOIN answer a ON q.ID = a.questionID
+    LEFT JOIN attraction att ON att.ID = q.attractionID
+    LEFT JOIN userAccount u ON u.ID = q.userID -- question user
+    LEFT JOIN userAccount ua ON ua.ID = a.userID -- answer user
+  WHERE q.attractionId = ?`;
 
-  connection.query(sql, function(err, results, fields) {
+  connection.query(sql, [attractionId], function(err, results, fields) {
     if (err) {
       throw err;
     } else {
       cb(results);
     }
   })
+}
+
+let postQuestion = function (userId, attractionId, question, cb) {
+  // console.log('attractionId', attractionId);
+  const questionDate = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
+
+  var sql = "INSERT INTO question (userID, attractionID, question, questionDate) VALUES (?, ?, ?, ?)";
+  connection.query(sql, [userId, attractionId, question, questionDate], function (err, result, fields) {
+    if (err) {
+      throw err;
+    } else {
+      cb(result);
+    }
+  });
 }
 
 
@@ -180,3 +196,4 @@ module.exports.getAttraction = getAttraction;
 module.exports.getQuestion = getQuestion;
 module.exports.getAnswer = getAnswer;
 module.exports.getQuestions = getQuestions;
+module.exports.postQuestion = postQuestion;
