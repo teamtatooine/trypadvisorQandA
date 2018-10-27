@@ -3,6 +3,10 @@ const db = require('./db/index');
 const bodyParser = require('body-parser');
 let app = express();
 const port = process.env.PORT || 5000;
+const cors = require('cors');
+
+app.use(cors());
+app.options('*', cors());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -87,9 +91,14 @@ app.get('/api/questions/:attractionId', (req, res) => {
     result.answer.user.userPhotoUrl = data[0].answerUserProfilePicture;
     result.answer.user.userMemberSince = data[0].answerUserMemberSince;
     result.attractionName = data[0].name;
-    res.json(result);
+    res.json([result]);
   })
 });
+
+app.post('/api/question/:questionId/:userId', (req, res) => {
+  console.log('params', req.params);
+  console.log('body', req.body);
+})
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
 
