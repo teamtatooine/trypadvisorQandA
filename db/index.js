@@ -183,6 +183,19 @@ let postQuestion = function (userId, attractionId, question, cb) {
   });
 }
 
+let postAnswer = function (userId, questionId, answer, cb) {
+  // console.log('attractionId', attractionId);
+  const answerDate = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
+
+  var sql = "INSERT INTO answer (questionID, userID, answer, answerDate) values (?, ?, ?, ?);";
+  connection.query(sql, [questionId, userId, answer, answerDate], function (err, result, fields) {
+    if (err) {
+      throw err;
+    } else {
+      cb(result);
+    }
+  });
+}
 
 // connection.end();
 
@@ -197,3 +210,4 @@ module.exports.getQuestion = getQuestion;
 module.exports.getAnswer = getAnswer;
 module.exports.getQuestions = getQuestions;
 module.exports.postQuestion = postQuestion;
+module.exports.postAnswer = postAnswer;

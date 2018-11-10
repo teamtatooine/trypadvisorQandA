@@ -86,17 +86,19 @@ app.get('/api/questions/:attractionId', (req, res) => {
       result.user.username = row.questionUser;
       result.user.userPhotoUrl = row.questionUserProfilePicture;
       result.user.userMemberSince = row.questionUserMemberSince;
-      result.answer = {};
-      result.answer.answer = row.answer;
-      result.answer.answerDate = row.answerDate;
-      result.answer.user = {};
-      result.answer.user.username = row.answerUser;
-      result.answer.user.userPhotoUrl = row.answerUserProfilePicture;
-      result.answer.user.userMemberSince = row.answerUserMemberSince;
+      result.answer = [];
+      let answerObj = {};
+      answerObj.answer = row.answer;
+      answerObj.answerDate = row.answerDate;
+      answerObj.user = {};
+      answerObj.user.username = row.answerUser;
+      answerObj.user.userPhotoUrl = row.answerUserProfilePicture;
+      answerObj.user.userMemberSince = row.answerUserMemberSince;
+      result.answer.push(answerObj);
       result.attractionName = row.name;
       resArray.push(result);
     });
-    console.log('😇', resArray);
+    // console.log('😇', resArray);
     res.json(resArray);
   })
 });
@@ -120,19 +122,32 @@ app.post('/api/question/:attractionId/:userId', (req, res) => {
         result.user.username = row.questionUser;
         result.user.userPhotoUrl = row.questionUserProfilePicture;
         result.user.userMemberSince = row.questionUserMemberSince;
-        result.answer = {};
-        result.answer.answer = row.answer;
-        result.answer.answerDate = row.answerDate;
-        result.answer.user = {};
-        result.answer.user.username = row.answerUser;
-        result.answer.user.userPhotoUrl = row.answerUserProfilePicture;
-        result.answer.user.userMemberSince = row.answerUserMemberSince;
+        result.answer = [];
+        let answerObj = {};
+        answerObj.answer = row.answer;
+        answerObj.answerDate = row.answerDate;
+        answerObj.user = {};
+        answerObj.user.username = row.answerUser;
+        answerObj.user.userPhotoUrl = row.answerUserProfilePicture;
+        answerObj.user.userMemberSince = row.answerUserMemberSince;
+        result.answer.push(answerObj);
         result.attractionName = row.name;
         resArray.push(result);
       });
-      console.log('😇', resArray);
+      // console.log('😇', resArray);
       res.json(resArray);
     });
+  });
+})
+
+app.post('/api/answer/:questionId/:userId', (req, res) => {
+  const userId = req.params.userId,
+        questionId = req.params.questionId,
+        answer = req.body.answer
+        console.log('userId: ' + userId + ' questionId: ' + questionId + ' answer: ' + answer);
+
+  db.postAnswer(userId, questionId, answer, function(data) {
+    res.end('');
   });
 })
 
