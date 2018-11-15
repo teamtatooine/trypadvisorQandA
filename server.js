@@ -10,7 +10,7 @@ app.options('*', cors());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(__dirname + '/TrypAdvisorClient/dist'));
+app.use(express.static(__dirname + '/MergedTrypAdvisorClient/dist'));
 
 app.get('/api/hello', (req, res) => {
   res.send({ express: 'Hello From Express' });
