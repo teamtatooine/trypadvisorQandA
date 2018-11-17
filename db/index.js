@@ -2,10 +2,11 @@ const data = require('../data');
 const faker = require('faker');
 const moment = require('moment');
 var mysql      = require('mysql');
+const aws = require('./../config');
 var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : 'password',
+  host     : 'trypadvisor.c8snteeq2uow.us-east-2.rds.amazonaws.com',
+  user     : 'rcalderon',
+  password : 'jason1029',
   database : 'tatooine'
 });
 

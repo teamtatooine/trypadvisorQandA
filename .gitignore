@@ -4,6 +4,9 @@
 /client
 /old-client
 /TrypAdvisorClient
+/MergedTrypAdvisorClient
+
+config.js
 
 # dependencies
 /node_modules
